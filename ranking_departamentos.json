@@ -1,0 +1,236 @@
+[
+    {
+        "departamento": "LIMA METROPOLITANA",
+        "electores_habiles": 7758529,
+        "votos_emitidos": 6209790,
+        "votos_validos": 5506405,
+        "votos_candidato": 136082,
+        "participacion": 80.04,
+        "porcentaje_candidato": 2.47
+    },
+    {
+        "departamento": "AREQUIPA",
+        "electores_habiles": 1215136,
+        "votos_emitidos": 984714,
+        "votos_validos": 871296,
+        "votos_candidato": 7419,
+        "participacion": 81.04,
+        "porcentaje_candidato": 0.85
+    },
+    {
+        "departamento": "CALLAO",
+        "electores_habiles": 820246,
+        "votos_emitidos": 639506,
+        "votos_validos": 550112,
+        "votos_candidato": 6329,
+        "participacion": 77.97,
+        "porcentaje_candidato": 1.15
+    },
+    {
+        "departamento": "LA LIBERTAD",
+        "electores_habiles": 1517046,
+        "votos_emitidos": 1137638,
+        "votos_validos": 909532,
+        "votos_candidato": 5657,
+        "participacion": 74.99,
+        "porcentaje_candidato": 0.62
+    },
+    {
+        "departamento": "LAMBAYEQUE",
+        "electores_habiles": 1041716,
+        "votos_emitidos": 810315,
+        "votos_validos": 660707,
+        "votos_candidato": 3917,
+        "participacion": 77.79,
+        "porcentaje_candidato": 0.59
+    },
+    {
+        "departamento": "JUNÍN",
+        "electores_habiles": 1048947,
+        "votos_emitidos": 776418,
+        "votos_validos": 627943,
+        "votos_candidato": 3310,
+        "participacion": 74.02,
+        "porcentaje_candidato": 0.53
+    },
+    {
+        "departamento": "LIMA PROVINCIAS",
+        "electores_habiles": 821369,
+        "votos_emitidos": 643090,
+        "votos_validos": 526273,
+        "votos_candidato": 3013,
+        "participacion": 78.29,
+        "porcentaje_candidato": 0.57
+    },
+    {
+        "departamento": "PIURA",
+        "electores_habiles": 1411645,
+        "votos_emitidos": 1047588,
+        "votos_validos": 798597,
+        "votos_candidato": 2892,
+        "participacion": 74.21,
+        "porcentaje_candidato": 0.36
+    },
+    {
+        "departamento": "ICA",
+        "electores_habiles": 708000,
+        "votos_emitidos": 578254,
+        "votos_validos": 478238,
+        "votos_candidato": 2501,
+        "participacion": 81.67,
+        "porcentaje_candidato": 0.52
+    },
+    {
+        "departamento": "ÁNCASH",
+        "electores_habiles": 960766,
+        "votos_emitidos": 689993,
+        "votos_validos": 537244,
+        "votos_candidato": 2186,
+        "participacion": 71.82,
+        "porcentaje_candidato": 0.41
+    },
+    {
+        "departamento": "CUSCO",
+        "electores_habiles": 1087949,
+        "votos_emitidos": 814119,
+        "votos_validos": 672238,
+        "votos_candidato": 1682,
+        "participacion": 74.83,
+        "porcentaje_candidato": 0.25
+    },
+    {
+        "departamento": "SAN MARTÍN",
+        "electores_habiles": 715674,
+        "votos_emitidos": 527464,
+        "votos_validos": 385366,
+        "votos_candidato": 1165,
+        "participacion": 73.7,
+        "porcentaje_candidato": 0.3
+    },
+    {
+        "departamento": "AMAZONAS",
+        "electores_habiles": 339650,
+        "votos_emitidos": 211960,
+        "votos_validos": 161118,
+        "votos_candidato": 1097,
+        "participacion": 62.41,
+        "porcentaje_candidato": 0.68
+    },
+    {
+        "departamento": "HUÁNUCO",
+        "electores_habiles": 619597,
+        "votos_emitidos": 413471,
+        "votos_validos": 321933,
+        "votos_candidato": 1040,
+        "participacion": 66.73,
+        "porcentaje_candidato": 0.32
+    },
+    {
+        "departamento": "CAJAMARCA",
+        "electores_habiles": 1195158,
+        "votos_emitidos": 821310,
+        "votos_validos": 642941,
+        "votos_candidato": 961,
+        "participacion": 68.72,
+        "porcentaje_candidato": 0.15
+    },
+    {
+        "departamento": "TACNA",
+        "electores_habiles": 293303,
+        "votos_emitidos": 240871,
+        "votos_validos": 213702,
+        "votos_candidato": 946,
+        "participacion": 82.12,
+        "porcentaje_candidato": 0.44
+    },
+    {
+        "departamento": "PUNO",
+        "electores_habiles": 926127,
+        "votos_emitidos": 736678,
+        "votos_validos": 621722,
+        "votos_candidato": 702,
+        "participacion": 79.54,
+        "porcentaje_candidato": 0.11
+    },
+    {
+        "departamento": "LORETO",
+        "electores_habiles": 761918,
+        "votos_emitidos": 447600,
+        "votos_validos": 336564,
+        "votos_candidato": 627,
+        "participacion": 58.75,
+        "porcentaje_candidato": 0.19
+    },
+    {
+        "departamento": "UCAYALI",
+        "electores_habiles": 432147,
+        "votos_emitidos": 286159,
+        "votos_validos": 213661,
+        "votos_candidato": 571,
+        "participacion": 66.22,
+        "porcentaje_candidato": 0.27
+    },
+    {
+        "departamento": "MOQUEGUA",
+        "electores_habiles": 144937,
+        "votos_emitidos": 114037,
+        "votos_validos": 98504,
+        "votos_candidato": 409,
+        "participacion": 78.68,
+        "porcentaje_candidato": 0.42
+    },
+    {
+        "departamento": "AYACUCHO",
+        "electores_habiles": 479668,
+        "votos_emitidos": 327796,
+        "votos_validos": 261555,
+        "votos_candidato": 390,
+        "participacion": 68.34,
+        "porcentaje_candidato": 0.15
+    },
+    {
+        "departamento": "APURÍMAC",
+        "electores_habiles": 347439,
+        "votos_emitidos": 245221,
+        "votos_validos": 192785,
+        "votos_candidato": 340,
+        "participacion": 70.58,
+        "porcentaje_candidato": 0.18
+    },
+    {
+        "departamento": "TUMBES",
+        "electores_habiles": 180124,
+        "votos_emitidos": 140810,
+        "votos_validos": 110029,
+        "votos_candidato": 311,
+        "participacion": 78.17,
+        "porcentaje_candidato": 0.28
+    },
+    {
+        "departamento": "PASCO",
+        "electores_habiles": 222557,
+        "votos_emitidos": 145199,
+        "votos_validos": 115062,
+        "votos_candidato": 295,
+        "participacion": 65.24,
+        "porcentaje_candidato": 0.26
+    },
+    {
+        "departamento": "HUANCAVELICA",
+        "electores_habiles": 322157,
+        "votos_emitidos": 207108,
+        "votos_validos": 164579,
+        "votos_candidato": 138,
+        "participacion": 64.29,
+        "porcentaje_candidato": 0.08
+    },
+    {
+        "departamento": "MADRE DE DIOS",
+        "electores_habiles": 146383,
+        "votos_emitidos": 103625,
+        "votos_validos": 80089,
+        "votos_candidato": 116,
+        "participacion": 70.79,
+        "porcentaje_candidato": 0.14
+    }
+]

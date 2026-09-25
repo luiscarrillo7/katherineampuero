@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estadísticas - Diagrama de Pareto</title>
+    <script>
+      if (!sessionStorage.getItem("saep_token")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <!-- Cargamos la librería Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      /* Estilos del Encabezado */
+      .encabezado {
+        width: 100%;
+        max-width: 1000px;
+        display: flex;
+        justify-content: space-between; /* Separa los elementos */
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap; /* MAGIA: Permite que bajen de línea si no hay espacio */
+        gap: 15px; /* Da un respiro entre los elementos cuando se apilan */
+      }
+      .btn-volver {
+        background-color: #6f9c76;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .contenedor-grafico {
+        width: 100%;
+        max-width: 1200px;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* En celulares, permite deslizar horizontalmente si el gráfico es muy ancho */
+        overflow-x: auto;
+      }
+      /* Forzamos un ancho mínimo para que en celular no se aplaste */
+      .area-canvas {
+        min-width: 800px;
+        height: 600px;
+      }
+
+      @media (max-width: 768px) {
+        .encabezado {
+          flex-direction: column;
+          text-align: center;
+        }
+        .area-canvas {
+          height: 400px;
+          min-width: 600px;
+        }
+      }
+      .footer-saep {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #2c3e50;
+        color: #bdc3c7;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 13px;
+        font-family: Arial, sans-serif;
+        z-index: 1000;
+        box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .footer-saep strong {
+        color: #ffffff;
+      }
+      /* Estilos del Recuadro de Votos Totales */
+      .tarjeta-total {
+        background-color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        font-family: Arial, sans-serif;
+        border-left: 6px solid #6f9c76;
+        text-align: center;
+        min-width: 120px;
+      }
+      .tarjeta-total h3 {
+        margin: 0;
+        font-size: 11px;
+        color: #7f8c8d;
+        text-transform: uppercase;
+      }
+      .tarjeta-total p {
+        margin: 5px 0 0 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="encabezado">
+      <!-- 1. La tarjeta del total -->
+      <div class="tarjeta-total">
+        <h3>Total Nacional</h3>
+        <p id="total-peru-numero">184,096</p>
+      </div>
+
+      <!-- 2. El título de la página -->
+      <h2 style="color: #2c3e50; margin: 0; text-align: center">
+        Análisis de Votos Válidos (Pareto)
+      </h2>
+
+      <!-- 3. El botón para regresar -->
+      <a href="index.html" class="btn-volver">⬅ Volver al Mapa</a>
+    </div>
+
+    <div class="contenedor-grafico">
+      <div class="area-canvas">
+        <canvas id="paretoChart"></canvas>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          // 1. Cargamos el JSON
+          const response = await fetch("ranking_departamentos.json");
+          const datos = await response.json();
+
+          let etiquetas = [];
+          let votosCandidato = [];
+          let porcentajesAcumulados = [];
+
+          // Calcular el total nacional de votos DE LA CANDIDATA para sacar el Pareto
+          let totalVotosCandidataNacional = datos.reduce(
+            (suma, dep) => suma + dep.votos_candidato,
+            0,
+          );
+          let acumulado = 0;
+
+          // 2. Llenamos los datos y construimos el cuadro HTML de abajo (opcional si quieres tabla)
+          datos.forEach((dep) => {
+            etiquetas.push(dep.departamento);
+
+            // Calculamos qué porcentaje del total nacional de sus propios votos representa este departamento
+            let porcentajeDelTotal =
+              (dep.votos_candidato / totalVotosCandidataNacional) * 100;
+            votosCandidato.push(porcentajeDelTotal.toFixed(2));
+
+            acumulado += porcentajeDelTotal;
+            porcentajesAcumulados.push(acumulado.toFixed(2));
+          });
+
+          // 3. Dibujar el Gráfico de Pareto
+          const ctx = document.getElementById("paretoChart").getContext("2d");
+          new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: etiquetas,
+              datasets: [
+                {
+                  type: "line",
+                  label: "% Acumulado de Votos Propios",
+                  data: porcentajesAcumulados,
+                  borderColor: "#e74c3c", // Línea Roja como en tu imagen
+                  backgroundColor: "#e74c3c",
+                  borderWidth: 2,
+                  yAxisID: "y-acumulado",
+                  tension: 0.1,
+                  fill: false,
+                  pointRadius: 3,
+                },
+                {
+                  type: "bar",
+                  label: "% de Votos Aportados por Región",
+                  data: votosCandidato,
+                  backgroundColor: "rgba(52, 152, 219, 0.6)", // Barras Azules
+                  borderColor: "rgba(41, 128, 185, 1)",
+                  borderWidth: 1,
+                  yAxisID: "y-porcentaje",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                tooltip: {
+                  mode: "index",
+                  intersect: false,
+                  callbacks: {
+                    // Esta función agrega datos extra en la cajita negra al pasar el mouse
+                    afterBody: function (context) {
+                      if (context[0].datasetIndex === 1) {
+                        // Solo para las barras azules
+                        let indice = context[0].dataIndex;
+                        let depActual = datos[indice];
+                        return [
+                          "",
+                          "--- Info Adicional ---",
+                          "Votos de la candidata: " +
+                            depActual.votos_candidato.toLocaleString("es-PE"),
+                          "% de apoyo en la región: " +
+                            depActual.porcentaje_candidato +
+                            "%",
+                          "Asistencia a votar: " +
+                            depActual.participacion +
+                            "%",
+                        ];
+                      }
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  ticks: { maxRotation: 90, minRotation: 45 },
+                },
+                "y-porcentaje": {
+                  type: "linear",
+                  position: "left",
+                  title: {
+                    display: true,
+                    text: "% del Total de Votos de la Candidata",
+                  },
+                  min: 0,
+                },
+                "y-acumulado": {
+                  type: "linear",
+                  position: "right",
+                  title: { display: true, text: "% Acumulado" },
+                  min: 0,
+                  max: 100,
+                  grid: { drawOnChartArea: false },
+                },
+              },
+            },
+          });
+        } catch (error) {
+          console.error("Error cargando los datos para el gráfico:", error);
+        }
+      });
+    </script>
+    <footer class="footer-saep">
+      &copy; 2026 <strong>SAEP</strong> | Los derechos del sistema pertenecen al
+      Informático <strong>Luis Carrillo Nuñez</strong>.
+    </footer>
+  </body>
+</html>

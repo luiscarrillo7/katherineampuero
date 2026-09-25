@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta tu Local de Votación - SAEP</title>
+    <script>
+      if (!sessionStorage.getItem("saep_token")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      /* Encabezado Principal */
+      .encabezado-saep {
+        width: 100%;
+        background-color: rgba(26, 37, 47, 0.95);
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        border-bottom: 4px solid #0088cc;
+        box-sizing: border-box;
+      }
+      .encabezado-saep h1 {
+        margin: 0;
+        font-size: 20px;
+        text-transform: uppercase;
+      }
+      .encabezado-saep h2 {
+        margin: 5px 0 0 0;
+        font-size: 14px;
+        color: #f1c40f;
+        font-weight: normal;
+      }
+
+      /* Contenedor Central del Buscador */
+      .contenedor-buscador {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        border-top: 6px solid #27ae60;
+      }
+      .contenedor-buscador h3 {
+        margin-top: 0;
+        color: #2c3e50;
+        font-size: 22px;
+      }
+      .contenedor-buscador p {
+        color: #7f8c8d;
+        font-size: 14px;
+        margin-bottom: 25px;
+      }
+
+      /* Input y Botón */
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .input-group input {
+        padding: 15px;
+        font-size: 18px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+      .input-group input:focus {
+        border-color: #27ae60;
+      }
+      .input-group button {
+        background-color: #27ae60;
+        color: white;
+        border: none;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .input-group button:hover {
+        background-color: #2ecc71;
+      }
+
+      /* Tarjeta de Resultado */
+      .resultado-box {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #fcfcfc;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        text-align: left;
+        display: none; /* Oculto inicialmente */
+      }
+      .resultado-box h4 {
+        margin: 0 0 15px 0;
+        color: #0088cc;
+        font-size: 18px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+      }
+      .resultado-box p {
+        margin: 8px 0;
+        font-size: 14px;
+        color: #333;
+      }
+      .resultado-box .highlight {
+        color: #ff9800;
+        font-weight: bold;
+        font-size: 16px;
+      }
+      .resultado-box .local-nombre {
+        color: #2c3e50;
+        font-weight: bold;
+        font-size: 15px;
+      }
+
+      /* Botón de Regreso */
+      .btn-volver {
+        display: inline-block;
+        margin-top: 20px;
+        color: #7f8c8d;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .btn-volver:hover {
+        color: #2c3e50;
+        text-decoration: underline;
+      }
+
+      /* Footer */
+      .footer-saep {
+        margin-top: auto;
+        width: 100%;
+        background-color: #2c3e50;
+        color: #bdc3c7;
+        text-align: center;
+        padding: 15px 0;
+        font-size: 12px;
+      }
+      .footer-saep strong {
+        color: #ffffff;
+      }
+
+      @media (max-width: 600px) {
+        .encabezado-saep h1 {
+          font-size: 16px;
+        }
+        .contenedor-buscador {
+          padding: 25px;
+          margin-top: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Encabezado -->
+    <header class="encabezado-saep">
+      <h1>Sistema de Apoyo Electoral Parlamentario - SAEP</h1>
+      <h2>Katherine Ampuero - Senado Nacional N° 4</h2>
+    </header>
+
+    <!-- Buscador -->
+    <div class="contenedor-buscador">
+      <h3>Consulta tu Local de Votación</h3>
+      <p>Ingresa el DNI del elector para conocer su mesa y colegio asignado.</p>
+
+      <div class="input-group">
+        <input
+          type="number"
+          id="input-dni"
+          placeholder="Ej: 76548412"
+          maxlength="8"
+          oninput="
+            if (this.value.length > 8) this.value = this.value.slice(0, 8);
+          "
+        />
+        <button id="btn-buscar">🔎 Consultar DNI</button>
+      </div>
+
+      <!-- Caja de Resultados (Aparece con JS) -->
+      <!-- Caja de Resultados (Aparece con JS) -->
+      <div id="caja-resultado" class="resultado-box">
+        <h4>📍 Información del Elector</h4>
+        <p>DNI: <span class="highlight" id="res-dni"></span></p>
+        <p>Mesa N°: <span class="highlight" id="res-mesa"></span></p>
+        <p style="margin-top: 15px">
+          <strong>Colegio:</strong><br />
+          <span class="local-nombre" id="res-local"></span>
+        </p>
+        <p>
+          <strong>Ubicación:</strong><br />
+          <span id="res-ubi"></span>
+        </p>
+
+        <!-- NUEVA LÍNEA PARA LOS VOTOS -->
+        <div
+          style="
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f8f5;
+            border-left: 4px solid #27ae60;
+            border-radius: 4px;
+          "
+        >
+          <p style="margin: 0; font-size: 15px; color: #2c3e50">
+            🗳️ Votos de tu candidata aquí:
+            <strong
+              id="res-votos"
+              style="font-size: 20px; color: #27ae60"
+            ></strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- Mensaje de Error (Aparece con JS) -->
+      <div
+        id="caja-error"
+        class="resultado-box"
+        style="
+          border-color: #e74c3c;
+          background-color: #fdf5f5;
+          text-align: center;
+        "
+      >
+        <p
+          style="color: #c0392b; font-weight: bold; margin: 0"
+          id="msj-error"
+        ></p>
+      </div>
+
+      <a href="index.html" class="btn-volver">⬅ Volver al Mapa Principal</a>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="footer-saep">
+      &copy; 2026 <strong>SAEP</strong> | Los derechos del sistema pertenecen al
+      Informático <strong>Luis Carrillo Nuñez</strong>.
+    </footer>
+
+    <!-- Lógica de Consulta -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const btnBuscar = document.getElementById("btn-buscar");
+        const inputDni = document.getElementById("input-dni");
+
+        const cajaResultado = document.getElementById("caja-resultado");
+        const cajaError = document.getElementById("caja-error");
+        const msjError = document.getElementById("msj-error");
+
+        btnBuscar.addEventListener("click", async () => {
+          const dni = inputDni.value.trim();
+
+          // Ocultar cajas previas
+          cajaResultado.style.display = "none";
+          cajaError.style.display = "none";
+
+          if (dni.length !== 8) {
+            msjError.innerText =
+              "Por favor, ingresa un DNI válido de 8 dígitos.";
+            cajaError.style.display = "block";
+            return;
+          }
+
+          btnBuscar.innerText = "⏳ Buscando en ONPE...";
+          btnBuscar.disabled = true;
+
+          try {
+            // 1. Consultar a NUESTRO PROPIO SERVIDOR en Vercel
+            const miApiUrl = `/api/consulta?dni=${dni}`;
+
+            const resOnpe = await fetch(miApiUrl);
+
+            if (!resOnpe.ok)
+              throw new Error("Error en la conexión con nuestra API interna.");
+
+            const dataOnpe = await resOnpe.json();
+
+            if (dataOnpe.success && dataOnpe.data && dataOnpe.data.mesa) {
+              const numeroMesa = dataOnpe.data.mesa; // Ej: "054696"
+
+              // 2. Buscar ese número de mesa en nuestro JSON local
+              const resLocal = await fetch("mesas_locales.json");
+              if (!resLocal.ok)
+                throw new Error(
+                  "Error al cargar la base de datos local de colegios.",
+                );
+
+              const mesasJson = await resLocal.json();
+              const infoMesa = mesasJson[numeroMesa];
+
+              document.getElementById("res-dni").innerText = dni;
+              document.getElementById("res-mesa").innerText = numeroMesa;
+
+              if (infoMesa) {
+                // Si existe en el Excel (JSON)
+                document.getElementById("res-local").innerText =
+                  infoMesa.colegio;
+                document.getElementById("res-ubi").innerText =
+                  `${infoMesa.distrito}, ${infoMesa.provincia} - ${infoMesa.departamento}`;
+
+                // Inyectamos los votos leídos del JSON
+                document.getElementById("res-votos").innerText = infoMesa.votos;
+              } else {
+                // Si no existe en el Excel
+                document.getElementById("res-local").innerText =
+                  "No registrado en la base de datos del partido.";
+                document.getElementById("res-ubi").innerText =
+                  "Ubicación desconocida.";
+                document.getElementById("res-votos").innerText = "0";
+              }
+
+              cajaResultado.style.display = "block";
+            } else {
+              msjError.innerText =
+                "No se encontró información para este DNI en el padrón.";
+              cajaError.style.display = "block";
+            }
+          } catch (error) {
+            console.error("Detalle del error:", error);
+            msjError.innerText =
+              "Error de red o bloqueo de seguridad por parte del servidor ONPE.";
+            cajaError.style.display = "block";
+          } finally {
+            btnBuscar.innerText = "🔎 Consultar DNI";
+            btnBuscar.disabled = false;
+          }
+        });
+
+        // Permitir buscar presionando "Enter"
+        inputDni.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            btnBuscar.click();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Consulta Detallada de Votos</title>
+    <script>
+      if (!sessionStorage.getItem("saep_token")) {
+        window.location.href = "login.html";
+      }
+    </script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        padding: 20px;
+      }
+      .contenedor {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .grupo {
+        margin-bottom: 15px;
+      }
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+      }
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      select:disabled {
+        background-color: #e9ecef;
+      }
+      .tarjeta-votos {
+        background: #ff9800;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        margin-top: 20px;
+      }
+      .tarjeta-votos h2 {
+        margin: 0;
+        font-size: 32px;
+      }
+      .tarjeta-votos p {
+        margin: 5px 0 0 0;
+        font-size: 14px;
+        text-transform: uppercase;
+      }
+      .footer-saep {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #2c3e50;
+        color: #bdc3c7;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 13px;
+        font-family: Arial, sans-serif;
+        z-index: 1000;
+        box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .footer-saep strong {
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contenedor">
+      <h2 style="text-align: center; color: #2c3e50">Desglose de Votos</h2>
+
+      <div class="grupo">
+        <label>Departamento:</label>
+        <select id="sel-dep">
+          <option value="">-- Seleccione --</option>
+        </select>
+      </div>
+      <div class="grupo">
+        <label>Provincia:</label>
+        <select id="sel-prov" disabled>
+          <option value="">-- Seleccione --</option>
+        </select>
+      </div>
+      <div class="grupo">
+        <label>Distrito:</label>
+        <select id="sel-dist" disabled>
+          <option value="">-- Seleccione --</option>
+        </select>
+      </div>
+      <div class="grupo">
+        <label>Colegio / Local de Votación:</label>
+        <select id="sel-col" disabled>
+          <option value="">-- Seleccione --</option>
+        </select>
+      </div>
+      <div class="grupo">
+        <label>Mesa de Votación:</label>
+        <select id="sel-mesa" disabled>
+          <option value="">-- Seleccione --</option>
+        </select>
+      </div>
+
+      <!-- Muestra los votos totales de la selección actual -->
+      <div class="tarjeta-votos">
+        <h2 id="total-votos">0</h2>
+        <p id="nivel-votos">Votos Totales a nivel Nacional</p>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const selDep = document.getElementById("sel-dep");
+        const selProv = document.getElementById("sel-prov");
+        const selDist = document.getElementById("sel-dist");
+        const selCol = document.getElementById("sel-col");
+        const selMesa = document.getElementById("sel-mesa");
+        const txtVotos = document.getElementById("total-votos");
+        const txtNivel = document.getElementById("nivel-votos");
+
+        let db = {};
+
+        // 1. Cargar el JSON
+        try {
+          const response = await fetch("jerarquia_completa.json");
+          db = await response.json();
+
+          // Llenar Departamentos (Ya no sumamos nada)
+          for (const dep in db) {
+            selDep.add(new Option(dep, dep));
+          }
+          
+          // AQUÍ PONES TU DATO OFICIAL ESTÁTICO (con todo y comas)
+          txtVotos.innerText = "184,599"; 
+          txtNivel.innerText = "Votos Totales a nivel Nacional";
+        } catch (error) {
+          console.error("Error al cargar los datos:", error);
+          txtVotos.innerText = "Error";
+        }
+
+        // Función para limpiar selects hijos
+        const limpiarSelects = (...selects) => {
+          selects.forEach((s) => {
+            s.innerHTML = '<option value="">-- Seleccione --</option>';
+            s.disabled = true;
+          });
+        };
+
+        // 2. Al cambiar Departamento
+        selDep.addEventListener("change", () => {
+          const dep = selDep.value;
+          limpiarSelects(selProv, selDist, selCol, selMesa);
+
+          if (dep) {
+            txtVotos.innerText = db[dep].votos.toLocaleString("es-PE");
+            txtNivel.innerText = `Votos totales en ${dep}`;
+            selProv.disabled = false;
+            for (const prov in db[dep].hijos)
+              selProv.add(new Option(prov, prov));
+          } else {
+            txtNivel.innerText = "Votos Totales a nivel Nacional";
+            txtVotos.innerText = "184,599";
+          }
+        });
+
+        // 3. Al cambiar Provincia
+        selProv.addEventListener("change", () => {
+          const dep = selDep.value;
+          const prov = selProv.value;
+          limpiarSelects(selDist, selCol, selMesa);
+
+          if (prov) {
+            txtVotos.innerText =
+              db[dep].hijos[prov].votos.toLocaleString("es-PE");
+            txtNivel.innerText = `Votos totales en ${prov}`;
+            selDist.disabled = false;
+            for (const dist in db[dep].hijos[prov].hijos)
+              selDist.add(new Option(dist, dist));
+          } else {
+            // Si deselecciona, mostramos el total del departamento
+            selDep.dispatchEvent(new Event("change"));
+          }
+        });
+
+        // 4. Al cambiar Distrito
+        selDist.addEventListener("change", () => {
+          const dep = selDep.value;
+          const prov = selProv.value;
+          const dist = selDist.value;
+          limpiarSelects(selCol, selMesa);
+
+          if (dist) {
+            txtVotos.innerText =
+              db[dep].hijos[prov].hijos[dist].votos.toLocaleString("es-PE");
+            txtNivel.innerText = `Votos totales en ${dist}`;
+            selCol.disabled = false;
+            for (const col in db[dep].hijos[prov].hijos[dist].hijos)
+              selCol.add(new Option(col, col));
+          } else {
+            selProv.dispatchEvent(new Event("change"));
+          }
+        });
+
+        // 5. Al cambiar Colegio
+        selCol.addEventListener("change", () => {
+          const dep = selDep.value;
+          const prov = selProv.value;
+          const dist = selDist.value;
+          const col = selCol.value;
+          limpiarSelects(selMesa);
+
+          if (col) {
+            txtVotos.innerText =
+              db[dep].hijos[prov].hijos[dist].hijos[col].votos.toLocaleString(
+                "es-PE",
+              );
+            txtNivel.innerText = `Votos en local: ${col}`;
+            selMesa.disabled = false;
+            for (const mesa in db[dep].hijos[prov].hijos[dist].hijos[col].hijos)
+              selMesa.add(new Option(mesa, mesa));
+          } else {
+            selDist.dispatchEvent(new Event("change"));
+          }
+        });
+
+        // 6. Al cambiar Mesa
+        selMesa.addEventListener("change", () => {
+          const dep = selDep.value;
+          const prov = selProv.value;
+          const dist = selDist.value;
+          const col = selCol.value;
+          const mesa = selMesa.value;
+
+          if (mesa) {
+            txtVotos.innerText =
+              db[dep].hijos[prov].hijos[dist].hijos[col].hijos[
+                mesa
+              ].votos.toLocaleString("es-PE");
+            txtNivel.innerText = `Votos en la Mesa N° ${mesa}`;
+          } else {
+            selCol.dispatchEvent(new Event("change"));
+          }
+        });
+      });
+    </script>
+    <a
+      href="index.html"
+      style="
+        display: inline-block;
+        background: #6f9c76;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        margin-bottom: 15px;
+      "
+      >⬅ Volver al Mapa</a
+    >
+    <footer class="footer-saep">
+      &copy; 2026 <strong>SAEP</strong> | Los derechos del sistema pertenecen al
+      Informático <strong>Luis Carrillo Nuñez</strong>.
+    </footer>
+  </body>
+</html>

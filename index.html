@@ -154,6 +154,16 @@
         background-color: #073b73;
         transform: scale(1.05);
       }
+      .btn-logout {
+        background-color: #c0392b;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn-logout:hover {
+        background-color: #922b21;
+        transform: scale(1.05);
+      }
 
       /* --- 3. CONTENEDOR DEL MAPA --- */
       .mapa-container {
@@ -327,6 +337,9 @@
         <a href="voto-extranjero.html" class="btn-accion btn-extranjero"
           >🌎 Voto en el Extranjero</a
         >
+        <button type="button" class="btn-accion btn-logout" onclick="cerrarSesion()">
+          🚪 Cerrar sesión
+        </button>
         <a href="mapa.html" style="display: inline-block; background: #e67e22; color: white; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; margin-top: 15px;">
   🗺️ Creador de Infografías
 </a>
@@ -675,6 +688,13 @@
           });
         });
       });
+    </script>
+  
+    <script>
+      function cerrarSesion() {
+        sessionStorage.removeItem("saep_token");
+        window.location.href = "login.html";
+      }
     </script>
   </body>
 </html>

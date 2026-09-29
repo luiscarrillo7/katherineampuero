@@ -11,6 +11,7 @@ export default function handler(req, res) {
     { usuario: "romy", password: "romy12345" },
     { usuario: "katherine", password: "senado4" },
     { usuario: "milton", password: "saep" },
+    { usuario: "rossana", password: "saep" },
   ];
 
   // Buscamos si existe un usuario y contraseña que coincidan en la lista

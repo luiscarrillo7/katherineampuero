@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú principal - SAEP</title>
+  <script>
+    if (!sessionStorage.getItem("saep_token")) {
+      window.location.href = "login.html";
+    }
+  </script>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:#f4f7f6;color:#2c3e50;min-height:100vh;display:flex;flex-direction:column}
+    .top{background:#1f2d3d;color:white;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+    .top h1{font-size:20px;margin:0}.top small{color:#cbd5e1}
+    .logout{border:0;background:#c0392b;color:#fff;padding:10px 16px;border-radius:8px;font-weight:bold;cursor:pointer}
+    .wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px}
+    .title{text-align:center;margin-bottom:28px}.title h2{margin:0 0 8px;font-size:28px}.title p{margin:0;color:#64748b}
+    .grid{width:min(900px,100%);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+    .card{background:white;border-radius:16px;padding:34px;text-decoration:none;color:inherit;box-shadow:0 8px 24px rgba(15,23,42,.12);border-top:6px solid #0088cc;transition:.2s}
+    .card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(15,23,42,.18)}
+    .card.despacho{border-top-color:#27ae60}.icon{font-size:44px;margin-bottom:16px}.card h3{font-size:24px;margin:0 0 10px}.card p{color:#64748b;line-height:1.5;margin:0 0 20px}
+    .enter{font-weight:bold;color:#0088cc}.despacho .enter{color:#1f8a4d}
+    footer{text-align:center;padding:16px;color:#64748b;font-size:12px}
+    @media(max-width:700px){.grid{grid-template-columns:1fr}.top{gap:15px}.top small{display:none}}
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div><h1>SAEP</h1><small>Sistema de Apoyo Electoral Parlamentario</small></div>
+    <button class="logout" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+  <main class="wrap">
+    <div class="title">
+      <h2>¿A qué módulo deseas ingresar?</h2>
+      <p>Selecciona Votaciones o Despacho.</p>
+    </div>
+    <div class="grid">
+      <a class="card" href="index.html">
+        <div class="icon">🗳️</div>
+        <h3>Votaciones</h3>
+        <p>Mapa electoral, consulta de votos, estadísticas, DNI y voto en el extranjero.</p>
+        <div class="enter">Ingresar a Votaciones →</div>
+      </a>
+      <a class="card despacho" href="despacho.html">
+        <div class="icon">📑</div>
+        <h3>Despacho</h3>
+        <p>Seguimiento de oficios, respuestas, alertas, reiterativos y documentos del despacho.</p>
+        <div class="enter">Ingresar a Despacho →</div>
+      </a>
+    </div>
+  </main>
+  <footer>SAEP · Panel principal</footer>
+  <script>
+    function cerrarSesion(){
+      sessionStorage.removeItem("saep_token");
+      window.location.href="login.html";
+    }
+  </script>
+</body>
+</html>

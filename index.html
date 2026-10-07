@@ -126,6 +126,8 @@
         transition: transform 0.2s;
         text-align: center;
       }
+      .btn-menu { background-color: #6c5ce7; }
+      .btn-menu:hover { background-color: #5649c0; transform: scale(1.05); }
       .btn-consulta {
         background-color: #ff9800;
       }
@@ -341,7 +343,8 @@
         <a href="mapa.html" style="display: inline-block; background: #e67e22; color: white; padding: 10px 20px; text-decoration: none; font-weight: bold; border-radius: 5px; margin-top: 15px;">
   🗺️ Creador de Infografías
 </a>
- <button type="button" class="btn-accion btn-logout" onclick="cerrarSesion()">
+ <a href="menu.html" class="btn-accion btn-menu">🏠 Menú principal</a>
+        <button type="button" class="btn-accion btn-logout" onclick="cerrarSesion()">
           🚪 Cerrar sesión
         </button>
       </div>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cargos y Ligas Parlamentarias</title>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .tabla-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid #dbe4ef;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    thead th {
+      background: #f8fafc;
+      color: #52627a;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: left;
+      padding: 16px 16px;
+      border-bottom: 1px solid #dbe4ef;
+    }
+
+    tbody td {
+      padding: 17px 16px;
+      vertical-align: middle;
+      border-bottom: 1px solid #dbe4ef;
+      font-size: 14px;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .organo {
+      width: 44%;
+    }
+
+    .cargo {
+      width: 15%;
+    }
+
+    .fecha {
+      width: 14%;
+      white-space: nowrap;
+    }
+
+    .estado {
+      width: 12%;
+    }
+
+    .tipo {
+      font-size: 16px;
+      font-weight: 700;
+      color: #071426;
+      margin-bottom: 7px;
+    }
+
+    .detalle {
+      color: #5b6d86;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .badge-cargo {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #fff4e8;
+      color: #b63d00;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge-activo {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #e7f7ee;
+      color: #07843f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 10px;
+      }
+    }
+  
+
+    .seccion-titulo {
+      margin: 28px 0 12px;
+      font-size: 19px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .liga {
+      font-weight: 700;
+      color: #071426;
+    }
+
+    .observacion {
+      color: #52627a;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .badge-presidenta {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #fff4e8;
+      color: #b63d00;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .badge-integrante {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: #315f9f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .nota-fuente {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+
+/* ===== IMPRESION EN 2 PAGINAS ===== */
+@page {
+  size: A4 landscape;
+  margin: 10mm;
+}
+
+@media print {
+  html, body {
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-size: 11px;
+  }
+
+  .tabla-wrap {
+    overflow: visible !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  table {
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr, td, th {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  thead th {
+    padding: 8px 10px !important;
+    font-size: 10px !important;
+  }
+
+  tbody td {
+    padding: 9px 10px !important;
+    font-size: 11px !important;
+  }
+
+  .tipo {
+    font-size: 12px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .detalle,
+  .observacion {
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+  }
+
+  .badge-cargo,
+  .badge-activo,
+  .badge-presidenta,
+  .badge-integrante {
+    padding: 5px 9px !important;
+    font-size: 10px !important;
+  }
+
+  /* La segunda seccion siempre comienza en la pagina 2 */
+  .seccion-titulo {
+    break-before: page;
+    page-break-before: always;
+    margin: 0 0 8px !important;
+    font-size: 16px !important;
+  }
+
+  /* Evita que la nota genere una tercera pagina */
+  .nota-fuente {
+    margin-top: 5px !important;
+    font-size: 8.5px !important;
+    line-height: 1.2 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Anchos optimizados para A4 horizontal */
+  body > .tabla-wrap:first-of-type th:nth-child(1),
+  body > .tabla-wrap:first-of-type td:nth-child(1) { width: 44% !important; }
+  body > .tabla-wrap:first-of-type th:nth-child(2),
+  body > .tabla-wrap:first-of-type td:nth-child(2) { width: 15% !important; }
+  body > .tabla-wrap:first-of-type th:nth-child(3),
+  body > .tabla-wrap:first-of-type td:nth-child(3) { width: 14% !important; }
+  body > .tabla-wrap:first-of-type th:nth-child(4),
+  body > .tabla-wrap:first-of-type td:nth-child(4) { width: 14% !important; }
+  body > .tabla-wrap:first-of-type th:nth-child(5),
+  body > .tabla-wrap:first-of-type td:nth-child(5) { width: 13% !important; }
+
+  .seccion-titulo + .tabla-wrap th:nth-child(1),
+  .seccion-titulo + .tabla-wrap td:nth-child(1) { width: 32% !important; }
+  .seccion-titulo + .tabla-wrap th:nth-child(2),
+  .seccion-titulo + .tabla-wrap td:nth-child(2) { width: 18% !important; }
+  .seccion-titulo + .tabla-wrap th:nth-child(3),
+  .seccion-titulo + .tabla-wrap td:nth-child(3) { width: 50% !important; }
+}
+
+    @media print {
+      .seccion-titulo {
+        margin-top: 10px !important;
+        margin-bottom: 6px !important;
+      }
+      tbody td {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+      }
+      .nota-fuente {
+        margin-top: 4px !important;
+        font-size: 10px !important;
+      }
+    }
+    
+body{padding-top:82px}
+.saep-module-nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;background:#1f2f3f;display:flex;align-items:center;justify-content:space-between;padding:0 28px;box-shadow:0 2px 8px rgba(15,23,42,.18)}
+.saep-module-brand{color:#fff;font-weight:800;font-size:20px}
+.saep-module-actions{display:flex;gap:10px}
+.saep-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:8px;text-decoration:none;border:0;cursor:pointer;font-weight:700;font-size:14px}
+.saep-btn-light{background:#fff;color:#1f2f3f}
+.saep-btn-danger{background:#d33f2f;color:#fff}
+.page-heading{max-width:1200px;margin:0 auto 18px}
+.page-heading h1{margin:0 0 6px;font-size:26px;color:#0f172a}
+.page-heading p{margin:0;color:#64748b;font-size:14px}
+@media(max-width:700px){body{padding-top:74px}.saep-module-nav{padding:0 12px;height:58px}.saep-module-brand{font-size:16px}.saep-btn{padding:8px 10px;font-size:12px}}
+@media print{.saep-module-nav,.page-heading{display:none!important}body{padding-top:0!important}}
+</style>
+</head>
+<body><script>(function(){if(!localStorage.getItem('saep_token')){window.location.href='login.html';}})();</script>
+<div class="saep-module-nav">
+<div class="saep-module-brand">SAEP · Cargos</div>
+<div class="saep-module-actions">
+<a class="saep-btn saep-btn-light" href="menu.html">← Menú</a>
+<a class="saep-btn saep-btn-light" href="despacho.html">📄 Despacho</a>
+<a class="saep-btn saep-btn-light" href="index.html">🗳 Votaciones</a>
+<button class="saep-btn saep-btn-danger" id="saepLogout" type="button">Cerrar sesión</button>
+</div>
+</div>
+<div class="page-heading">
+<h1>Cargos y Ligas Parlamentarias</h1>
+<p>Comisiones, cargos parlamentarios y ligas de amistad.</p>
+</div>
+
+<div class="tabla-wrap">
+<table>
+<thead>
+<tr>
+<th class="organo">ÓRGANO O COMISIÓN</th>
+<th class="cargo">CARGO</th>
+<th class="fecha">DESDE</th>
+<th class="fecha">HASTA</th>
+<th class="estado">ESTADO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div class="tipo">Comisión Bicameral</div>
+<div class="detalle">COMISIÓN DE BICAMERAL DE PRESUPUESTO Y CUENTA GENERAL DE LA REPÚBLICA</div>
+</td>
+<td><span class="badge-cargo">Titular</span></td>
+<td>18/08/2026</td>
+<td>26/07/2027</td>
+<td><span class="badge-activo">Activo</span></td>
+</tr>
+<tr>
+<td>
+<div class="tipo">Comisión Ordinaria Legislativa</div>
+<div class="detalle">Comisión de Justicia y Derechos Humanos</div>
+</td>
+<td><span class="badge-cargo">Presidenta</span></td>
+<td>14/08/2026</td>
+<td>26/07/2027</td>
+<td><span class="badge-activo">Activo</span></td>
+</tr>
+<tr>
+<td>
+<div class="tipo">Comisión Ordinaria Legislativa</div>
+<div class="detalle">Comisión de Constitución, Reglamento y Relaciones Exteriores</div>
+</td>
+<td><span class="badge-cargo">Secretaria</span></td>
+<td>13/08/2026</td>
+<td>26/07/2027</td>
+<td><span class="badge-activo">Activo</span></td>
+</tr>
+<tr>
+<td>
+<div class="tipo">Comisión Ordinaria Legislativa</div>
+<div class="detalle">Comisión en Asuntos de Gestión del Estado y Contraloría</div>
+</td>
+<td><span class="badge-cargo">Titular</span></td>
+<td>12/08/2026</td>
+<td>26/07/2027</td>
+<td><span class="badge-activo">Activo</span></td>
+</tr>
+<tr>
+<td>
+<div class="tipo">Comisión Ordinaria no Legislativa</div>
+<div class="detalle">Comisión de Procedimientos Especiales</div>
+</td>
+<td><span class="badge-cargo">Suplente</span></td>
+<td>12/08/2026</td>
+<td>26/07/2027</td>
+<td><span class="badge-activo">Activo</span></td>
+</tr>
+<tr>
+<td>
+<div class="tipo">Grupo Parlamentario</div>
+<div class="detalle">Renovación Popular</div>
+</td>
+<td><span class="badge-cargo">Titular</span></td>
+<td>27/07/2026</td>
+<td>26/07/2031</td>
+<td><span class="badge-activo">Activo</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="seccion-titulo">Ligas Parlamentarias</div>
+<div class="tabla-wrap">
+<table>
+<thead>
+<tr>
+<th style="width:40%;">LIGA PARLAMENTARIA</th>
+<th style="width:18%;">CARGO</th>
+<th style="width:42%;">OBSERVACIÓN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div class="liga">Perú - España</div></td>
+<td><span class="badge-presidenta">Presidenta</span></td>
+<td><div class="observacion">Vicepresidenta: Nora Bonifaz Carmona<br/>Secretario: Senador Jorge Velásquez Portocarrero</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Singapur</div></td>
+<td><span class="badge-presidenta">Presidenta</span></td>
+<td><div class="observacion">Vicepresidenta: Senadora Juana Ticona Cohaila<br/>Secretaria: Senadora Nora Bonifaz Carmona</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Alemania</div></td>
+<td><span class="badge-presidenta">Presidenta</span></td>
+<td><div class="observacion">Vicepresidente: Senador Héctor Ventura Ángel<br/>Secretaria: Senadora Nora Bonifaz Carmona</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Argentina</div></td>
+<td><span class="badge-integrante">Integrante</span></td>
+<td><div class="observacion">Coordinador de la liga: Miguel Ángel Velásquez García</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Corea del Sur</div></td>
+<td><span class="badge-integrante">Integrante</span></td>
+<td><div class="observacion">Coordinador de la liga: José Arista Arbildo</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Chile</div></td>
+<td><span class="badge-integrante">Integrante</span></td>
+<td><div class="observacion">Coordinadora de la liga: Milagros Jaúregui de Aguayo</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - China</div></td>
+<td><span class="badge-integrante">Integrante</span></td>
+<td><div class="observacion">Coordinador de la liga: Alejandro Aguinaga Recuenco</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Estados Unidos</div></td>
+<td><span class="badge-integrante">Integrante</span></td>
+<td><div class="observacion">Coordinadora de la liga: Milagros Jaúregui de Aguayo</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Japón</div></td>
+<td><span class="badge-presidenta">Secretaria</span></td>
+<td><div class="observacion">Coordinador de la liga: Marco Miyashiro Arashiro</div></td>
+</tr>
+<tr>
+<td><div class="liga">Perú - Reino Unido</div></td>
+<td><span class="badge-integrante">Integrante</span></td>
+<td><div class="observacion">Coordinador de la liga: Francisco Calisto Giampietri</div></td>
+</tr>
+<tr><td><div class="liga">Perú - Suiza</div></td><td><span class="badge-presidenta">Vicepresidenta</span></td><td><div class="observacion">Presidenta: Senadora Nora Bonifaz Carmona<br/>Secretaria: Senadora Mirtha Vásquez Chuquilin</div></td></tr></tbody>
+</table>
+</div>
+<div class="nota-fuente">Ligas parlamentarias según relación del Senado al 29/09/2026. En Perú-España y Perú-Singapur se incorporaron los cargos de Presidenta, Vicepresidencia y Secretaría según la información proporcionada.</div>
+<script>document.getElementById('saepLogout')?.addEventListener('click',function(){localStorage.removeItem('saep_token');window.location.href='login.html';});</script></body>
+</html>

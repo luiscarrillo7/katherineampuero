@@ -291,7 +291,7 @@ body{padding-top:82px}
 @media print{.saep-module-nav,.page-heading{display:none!important}body{padding-top:0!important}}
 </style>
 </head>
-<body><script>(function(){if(!localStorage.getItem('saep_token')){window.location.href='login.html';}})();</script>
+<body><script>(function(){if(!sessionStorage.getItem('saep_token')){window.location.href='login.html';}})();</script>
 <div class="saep-module-nav">
 <div class="saep-module-brand">SAEP · Cargos</div>
 <div class="saep-module-actions">
@@ -305,7 +305,6 @@ body{padding-top:82px}
 <h1>Cargos y Ligas Parlamentarias</h1>
 <p>Comisiones, cargos parlamentarios y ligas de amistad.</p>
 </div>
-
 <div class="tabla-wrap">
 <table>
 <thead>
@@ -446,5 +445,5 @@ body{padding-top:82px}
 </table>
 </div>
 <div class="nota-fuente">Ligas parlamentarias según relación del Senado al 29/09/2026. En Perú-España y Perú-Singapur se incorporaron los cargos de Presidenta, Vicepresidencia y Secretaría según la información proporcionada.</div>
-<script>document.getElementById('saepLogout')?.addEventListener('click',function(){localStorage.removeItem('saep_token');window.location.href='login.html';});</script></body>
+<script>document.getElementById('saepLogout')?.addEventListener('click',function(){sessionStorage.removeItem('saep_token');window.location.href='login.html';});</script></body>
 </html>

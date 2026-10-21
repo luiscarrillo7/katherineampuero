@@ -169,9 +169,9 @@ a{color:#0868bf;font-weight:700;text-decoration:none} a:hover{text-decoration:un
 #tabla{min-width:1700px}.drive-date{white-space:nowrap;font-weight:700;color:#475569}
 </style>
 </head>
-<body><div class="saep-module-nav"><a href="menu.html">← Menú</a><a href="index.html">🗳️ Votaciones</a><button onclick="sessionStorage.removeItem('saep_token'); window.location.href='login.html';" type="button">Cerrar sesión</button></div>
+<body><div class="saep-module-nav"><a href="menu.html">← Menú</a><a href="index.html">🗳️ Votaciones</a><a href="https://drive.google.com/drive/folders/1bIPBMeyK4tkWcqFd_R7Lt832u-Dza9s9" id="nuevaCarpetaFirmas" rel="noopener" target="_blank">📁 Nueva carpeta FIRMAS</a><button onclick="sessionStorage.removeItem('saep_token'); window.location.href='login.html';" type="button">Cerrar sesión</button></div>
 <div class="wrap"><div class="card">
-<header><h1>Seguimiento de Oficios – Carpeta FIRMAS</h1><p>Control actualizado hasta el Oficio 113, con reiteraciones, respuestas, trazabilidad y fecha de ingreso a Drive.</p></header><div class="print-report-meta" id="printReportMeta"></div>
+<header><h1>Seguimiento de Oficios – Carpeta FIRMAS</h1><p>Control actualizado hasta el Oficio 113, con reiteraciones, respuestas, trazabilidad y fecha de ingreso a Drive.</p><div id="driveMigracion" style="margin-top:10px;padding:8px 10px;background:rgba(255,255,255,.12);border-radius:8px;font-size:12px">Drive migrado: nueva raíz y carpeta FIRMAS enlazadas. Los enlaces directos de cada PDF se conservarán hasta poder mapear los nuevos IDs de la carpeta OFICIOS.</div></header><div class="print-report-meta" id="printReportMeta"></div>
 <div class="toolbar">
 <input id="q" placeholder="Buscar por número, destinatario, asunto o respuesta…"/>
 <select id="estado"><option value="">Todos los oficios</option><option value="Sí">Solo con respuesta</option><option value="No">Solo sin respuesta</option></select><select id="tipo"><option value="">Todos los tipos</option><option value="Consultivo">Consultivo</option><option value="Informativo">Informativo</option></select><select id="reiteracionFiltro"><option value="">Todos</option><option value="con">Con reiterativo</option><option value="sin">Sin reiterativo</option></select>
@@ -720,4 +720,10 @@ if(btnImprimir){
   });
 }
 </script>
-</body></html>
+<script id="driveFolderConfig">
+window.SAEP_DRIVE = {
+  rootFolderId: "13KQhqcNAc484hDEq-jaJKxzfBPVcRAD8",
+  firmasFolderId: "1bIPBMeyK4tkWcqFd_R7Lt832u-Dza9s9",
+  primeraLegislativaFolderId: "19LBo2b_98UTZJPJpOewXxPjwxJkOulUT"
+};
+</script></body></html>
